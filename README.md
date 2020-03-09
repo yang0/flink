@@ -6,3 +6,8 @@ practice flink programming
 * 3.5以上
 * python -m pip install apache-flink
 
+## 练习进度
+1 map
+2 flatmap
+3 Keyed Streams
+
