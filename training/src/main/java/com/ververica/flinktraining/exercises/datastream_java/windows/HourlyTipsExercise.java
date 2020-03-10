@@ -68,7 +68,7 @@ public class HourlyTipsExercise extends ExerciseBase {
 		            // 根据driveId 进行分组  
 		            .keyBy((TaxiFare fare) -> fare.driverId)  
 		            // 设置窗口时间为1小时  
-		            .window(TumblingEventTimeWindows.of(Time.hours(1)))
+		            .timeWindow(Time.hours(1))
 		            // AddTips()为aggFunction, WrapWithWindowInfo()为windowFunction
 		           // 先聚合，再输出，和reduce一样
 		            .aggregate(new AddTips(), new WrapWithWindowInfo());
@@ -88,6 +88,8 @@ public class HourlyTipsExercise extends ExerciseBase {
 		// execute the transformation pipeline
 		env.execute("Hourly Tips (java)");
 	}
+	
+	
 
 	private static class AddTips implements AggregateFunction<TaxiFare, Float, Float> {
 
