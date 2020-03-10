@@ -13,4 +13,4 @@ found on [http://training.ververica.com](http://training.ververica.com).
 com.ververica.flinktraining.exercises.datastream_java.state.RidesAndFaresExercise
 
 6. Stateful Enrichment
-7. Window: com.ververica.flinktraining.exercises.datastream_java.windows.HourlyTipsExercise
+7. Window: com.ververica.flinktraining.exercises.datastream_java.windows.HourlyTipsExercise。尝试了process, aggregate, reduce等windowFunction
