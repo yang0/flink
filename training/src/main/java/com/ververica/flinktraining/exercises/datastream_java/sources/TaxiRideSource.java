@@ -91,8 +91,9 @@ public class TaxiRideSource implements SourceFunction<TaxiRide> {
 	 * in a serving speed which is proportional to the specified serving speed factor.
 	 *
 	 * @param dataFilePath The gzipped input file from which the TaxiRide records are read.
-	 * @param maxEventDelaySecs The max time in seconds by which events are delayed.
-	 * @param servingSpeedFactor The serving speed factor by which the logical serving time is adjusted.
+	 * @param maxEventDelaySecs The max time in seconds by which events are delayed. 数据读取的速度
+	 * @param servingSpeedFactor The serving speed factor by which the logical serving time is adjusted. 
+	 * 批处理的时候尽量模拟了真实的时间间隔，但是加快了处理流程，比如把时间提高60倍，这样原来间隔1分钟进一条数据，会变成一秒钟就进来
 	 */
 	public TaxiRideSource(String dataFilePath, int maxEventDelaySecs, int servingSpeedFactor) {
 		if(maxEventDelaySecs < 0) {
@@ -223,6 +224,7 @@ public class TaxiRideSource implements SourceFunction<TaxiRide> {
 		return ride.getEventTime();
 	}
 
+	// 返回0~maxDelayMsecs之间的数值
 	public long getNormalDelayMsecs(Random rand) {
 		long delay = -1;
 		long x = maxDelayMsecs / 2;

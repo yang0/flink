@@ -43,6 +43,9 @@ import org.apache.flink.util.OutputTag;
  * Parameters:
  * -rides path-to-input-file
  * -fares path-to-input-file
+ *  
+ *  在stateful enrichment的例子中用了RichCoFlatMap 将TaxiRide和TaxiFare join起来联合输出，但是有个问题，这两类数据都有可能部分缺失，之前的demo可能会引起相关collection无限增长，最终内存耗尽。
+ *  本例使用了更先进的CoProcessFunction 及 Timer来解决这个问题
  *
  */
 public class ExpiringStateSolution extends ExerciseBase {
@@ -65,6 +68,7 @@ public class ExpiringStateSolution extends ExerciseBase {
 
 		DataStream<TaxiRide> rides = env
 				.addSource(rideSourceOrTest(new TaxiRideSource(ridesFile, maxEventDelay, servingSpeedFactor)))
+				// 人为的制造有瑕疵的数据，把所有end数据删掉，每隔1000条数据删掉删掉一条start数据
 				.filter((TaxiRide ride) -> (ride.isStart && (ride.rideId % 1000 != 0)))
 				.keyBy(ride -> ride.rideId);
 

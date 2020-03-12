@@ -14,3 +14,9 @@ com.ververica.flinktraining.exercises.datastream_java.state.RidesAndFaresExercis
 
 6. Stateful Enrichment
 7. Window: com.ververica.flinktraining.exercises.datastream_java.windows.HourlyTipsExercise。尝试了process, aggregate, reduce等windowFunction
+8. Timer, Watermarks: com.ververica.flinktraining.examples.datastream_java.process.CarEventSort
+9. side outpu： 没有实际练习代码，文档已相当清晰
+10. Event-time timer: com.ververica.flinktraining.exercises.datastream_java.process.ExpiringStateExercise
+	* checkpointed sources 
+	* Timer
+	* CoProcessFunction 

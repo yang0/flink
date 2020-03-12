@@ -33,6 +33,7 @@ import org.apache.flink.util.Collector;
 
 import java.util.PriorityQueue;
 
+// watermarker的缓冲时间本例中是30秒，对这段时间内的数据做一次排序然后做一次输出
 public class CarEventSort {
 	public static void main(String[] args) throws Exception {
 
@@ -51,6 +52,7 @@ public class CarEventSort {
 		// map to events
 		DataStream<ConnectedCarEvent> events = carData
 				.map((String line) -> ConnectedCarEvent.fromString(line))
+				// 创建了一个30秒的缓冲地带，对30秒内的数据做一次排序
 				.assignTimestampsAndWatermarks(new ConnectedCarAssigner());
 
 		// sort events
@@ -86,6 +88,7 @@ public class CarEventSort {
 				}
 				queue.add(event);
 				queueState.update(queue);
+				// watermarker超过这个时间，timer就会被fire
 				timerService.registerEventTimeTimer(event.timestamp);
 			}
 		}
@@ -94,7 +97,9 @@ public class CarEventSort {
 		public void onTimer(long timestamp, OnTimerContext context, Collector<ConnectedCarEvent> out) throws Exception {
 			PriorityQueue<ConnectedCarEvent> queue = queueState.value();
 			Long watermark = context.timerService().currentWatermark();
+			// 获取队列中的第一个元素
 			ConnectedCarEvent head = queue.peek();
+			// 只有小于watermark的数据才会被输出，本例中30秒内的数据会被缓存起来进行排序
 			while (head != null && head.timestamp <= watermark) {
 				out.collect(head);
 				queue.remove(head);
